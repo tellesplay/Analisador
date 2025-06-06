@@ -48,32 +48,20 @@
         h2.section-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 0.75rem; display: flex; align-items: center; }
         h2 .step-number { background-color: #6366f1; color: white; border-radius: 9999px; width: 2rem; height: 2rem; display: inline-flex; align-items: center; justify-content: center; margin-right: 0.75rem; }
         
-        .upload-area, .filter-area {
-            margin-top: 1rem;
-            padding: 1.5rem;
-            border: 2px dashed #4b5563;
-            border-radius: 0.375rem;
-            text-align: center;
+        .upload-area {
+            margin-top: 1rem; padding: 1.5rem; border: 2px dashed #4b5563; border-radius: 0.375rem; text-align: center;
         }
-        .filter-area {
-             border-style: solid;
-             padding: 1rem;
-             margin-bottom: 2rem;
-             text-align: left;
+        #post-filter-area {
+             border: 1px solid #4b5563; padding: 1rem; margin-top: 1.5rem; border-radius: 0.5rem;
         }
-
-        .filter-area label {
-            font-weight: 500;
-            margin-right: 1rem;
+        #post-filter-area label { font-weight: 500; margin-right: 1rem; }
+        #post-filter-area input[type="text"] {
+            background-color: #1f2937; border: 1px solid #4b5563; color: #d1d5db; padding: 0.5rem; border-radius: 0.375rem; width: 50%;
         }
-        .filter-area input[type="text"] {
-            background-color: #1f2937;
-            border: 1px solid #4b5563;
-            color: #d1d5db;
-            padding: 0.5rem;
-            border-radius: 0.375rem;
-            width: 60%;
+        #post-filter-area button {
+            background-color: #6366f1; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; transition: background-color 0.2s; margin-left: 1rem;
         }
+        #post-filter-area button:hover { background-color: #4f46e5; }
 
         .upload-area label { cursor: pointer; background-color: #1f2937; border-radius: 0.375rem; font-weight: 500; color: #818cf8; padding: 0.25rem; }
         .upload-area label:hover { color: #6366f1; }
@@ -86,8 +74,8 @@
         .diagnosis-box { padding: 1rem; border-radius: 0.5rem; text-align: center; margin-bottom: 1.5rem; }
         .diagnosis-box h3 { font-size: 1.25rem; font-weight: 700; }
         
-        .chart-container, .table-container { background-color: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 0.5rem; }
-        .table-container { max-height: 24rem; overflow-y: auto; }
+        .chart-container { background-color: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 0.5rem; height: 350px; /* Altura fixa para o gráfico */ }
+        .table-container { background-color: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 0.5rem; max-height: 24rem; overflow-y: auto; }
         .table-container table { width: 100%; font-size: 0.875rem; text-align: left; color: #d1d5db; }
         .table-container thead { font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; background-color: #374151; }
         .table-container th, .table-container td { padding: 0.75rem 1rem; }
@@ -118,9 +106,9 @@
                         <li>No Wireshark, vá em <code>Arquivo > Exportar Dissecações de Pacotes > Como CSV...</code></li>
                         <li>Exporte com as seguintes colunas:
                             <ul style="list-style-type: none; padding-left: 1rem; margin-top: 0.5rem;">
-                                <li><code>frame.number</code> (essencial)</li>
-                                <li><strong><code>frame.time_relative</code> (essencial para o gráfico de tempo)</strong></li>
-                                <li><code>ip.src</code> e <code>ip.dst</code> (essenciais)</li>
+                                <li><code>frame.number</code></li>
+                                <li><strong><code>frame.time_relative</code> (essencial para gráficos de tempo)</strong></li>
+                                <li><code>ip.src</code> e <code>ip.dst</code></li>
                                 <li><code>tcp.analysis.retransmission</code></li>
                                 <li><code>tcp.analysis.fast_retransmission</code></li>
                                 <li><code>tcp.analysis.duplicate_ack</code></li>
@@ -130,22 +118,10 @@
                 </div>
             </details>
             
-            <!-- Passo 2: Filtro -->
-            <div>
-                 <h2 class="section-title">
-                    <span class="step-number">2</span>
-                    Filtre o tráfego (Opcional)
-                </h2>
-                <div class="filter-area">
-                    <label for="ip-filter-input">Analisar tráfego do IP:</label>
-                    <input type="text" id="ip-filter-input" placeholder="Ex: 8.8.8.8">
-                </div>
-            </div>
-
-            <!-- Passo 3: Upload -->
+            <!-- Passo 2: Upload -->
             <div>
                 <h2 class="section-title">
-                    <span class="step-number">3</span>
+                    <span class="step-number">2</span>
                     Faça o upload do seu arquivo .csv
                 </h2>
                 <div class="upload-area">
@@ -167,7 +143,7 @@
 
             <!-- Área de Resultados -->
             <div id="results-area" class="results-section hidden">
-                <h2 style="font-size: 1.5rem; font-weight: 700; text-align: center; color: white; margin-bottom: 1.5rem;">Diagnóstico da Captura</h2>
+                <h2 style="font-size: 1.5rem; font-weight: 700; text-align: center; color: white; margin-bottom: 1.5rem;">Diagnóstico Geral da Captura</h2>
                 
                 <div class="results-grid">
                     <div class="stat-card">
@@ -189,14 +165,23 @@
                     <p id="diagnosis-text"></p>
                 </div>
 
+                <!-- Nova seção de filtro pós-análise -->
+                <div id="post-filter-area" class="hidden">
+                    <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; text-align: center;">Análise Específica por IP</h3>
+                    <div>
+                        <label for="ip-filter-input">Filtrar pelo IP:</label>
+                        <input type="text" id="ip-filter-input" placeholder="Digite o IP e clique em analisar">
+                        <button id="analyze-ip-button">Analisar IP</button>
+                    </div>
+                </div>
+                
                 <!-- Novo Gráfico de Tempo -->
-                <div id="time-chart-container" class="chart-container hidden" style="margin-bottom: 1.5rem;">
-                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; text-align: center;">Pacotes por Segundo (PPS)</h3>
-                    <canvas id="packet-time-chart"></canvas>
+                <div id="time-chart-container" class="chart-container hidden" style="margin-top: 1.5rem;">
+                    <canvas id="ip-traffic-chart"></canvas>
                 </div>
 
-                <div>
-                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; text-align: center;">Detalhes dos Pacotes Problemáticos</h3>
+                <div id="problem-table-container" style="margin-top: 1.5rem;">
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; text-align: center;">Detalhes dos Pacotes Problemáticos (Geral)</h3>
                     <div class="table-container">
                         <table>
                             <thead> <tr> <th># Pacote</th> <th>Origem</th> <th>Destino</th> <th>Motivo</th> </tr> </thead>
@@ -212,15 +197,21 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Referências aos elementos do DOM
             const fileUpload = document.getElementById('file-upload');
             const ipFilterInput = document.getElementById('ip-filter-input');
+            const analyzeIpButton = document.getElementById('analyze-ip-button');
             const fileNameDisplay = document.getElementById('file-name');
             const resultsArea = document.getElementById('results-area');
             const errorMessage = document.getElementById('error-message');
             const timeChartContainer = document.getElementById('time-chart-container');
+            const postFilterArea = document.getElementById('post-filter-area');
 
-            let packetTimeChart = null; // Para guardar a instância do novo gráfico
+            // Variáveis de estado
+            let ipTrafficChart = null; // Para guardar a instância do gráfico
+            let allPackets = []; // Para armazenar todos os pacotes do arquivo
 
+            // Evento de upload de arquivo
             fileUpload.addEventListener('change', (event) => {
                 const file = event.target.files[0];
                 if (!file) {
@@ -233,22 +224,34 @@
                 reader.onload = (e) => {
                     try {
                         const csvContent = e.target.result;
-                        const filterIp = ipFilterInput.value.trim();
-                        const stats = parseCsvAndAnalyze(csvContent, filterIp);
-                        displayResults(stats, filterIp);
+                        const globalStats = parseCsv(csvContent);
+                        displayGlobalResults(globalStats);
+
                         resultsArea.classList.remove('hidden');
+                        postFilterArea.classList.remove('hidden'); // Mostra a área de filtro
+                        timeChartContainer.classList.add('hidden'); // Esconde o gráfico
                         errorMessage.classList.add('hidden');
                     } catch (error) {
                         console.error("Erro ao processar arquivo:", error);
                         showError(error.message);
-                        resultsArea.classList.add('hidden');
                     }
                 };
-                reader.onerror = () => {
-                     showError('Não foi possível ler o arquivo.');
-                     resultsArea.classList.add('hidden');
-                };
                 reader.readAsText(file);
+            });
+
+            // Evento do botão para analisar IP específico
+            analyzeIpButton.addEventListener('click', () => {
+                const filterIp = ipFilterInput.value.trim();
+                if (!filterIp) {
+                    showError("Por favor, insira um endereço IP para filtrar.");
+                    return;
+                }
+                if (allPackets.length === 0) {
+                    showError("Nenhum dado de pacote carregado. Faça o upload de um arquivo primeiro.");
+                    return;
+                }
+                const ipStats = analyzeIpTraffic(filterIp);
+                displayIpChart(ipStats);
             });
             
             function showError(message) {
@@ -256,12 +259,17 @@
                 errorMessage.classList.remove('hidden');
             }
 
-            function parseCsvAndAnalyze(csv, filterIp) {
+            // Função que lê o CSV e armazena os dados
+            function parseCsv(csv) {
+                allPackets = []; // Limpa dados anteriores
+                let totalPackets = 0;
+                let totalLostPackets = 0;
+                const problematicPackets = [];
+                
                 const lines = csv.split('\n');
                 if (lines.length < 2) throw new Error('Arquivo CSV inválido ou vazio.');
                 
                 const header = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-                
                 const colIndices = {
                     frameNumber: header.indexOf('frame.number'),
                     timeRelative: header.indexOf('frame.time_relative'),
@@ -273,86 +281,74 @@
                 };
                 
                 if (colIndices.frameNumber === -1 || colIndices.ipSrc === -1 || colIndices.ipDst === -1 || colIndices.timeRelative === -1) {
-                    throw new Error('CSV não contém colunas essenciais. Exporte com: frame.number, frame.time_relative, ip.src, ip.dst.');
+                    throw new Error('CSV não contém colunas essenciais. Exporte com: frame.number, frame.time_relative, ip.src, ip.dst e tcp.analysis...');
                 }
 
-                let totalPackets = 0;
-                let lostPackets = 0;
-                const problematicPackets = [];
-                const packetsPerSecond = {};
-
                 for (let i = 1; i < lines.length; i++) {
-                    const line = lines[i];
-                    if (!line.trim()) continue;
-                    
-                    const data = line.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(d => d.replace(/"/g, ''));
-                    
+                    if (!lines[i].trim()) continue;
+                    const data = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(d => d.replace(/"/g, ''));
                     const srcIp = data[colIndices.ipSrc];
                     const dstIp = data[colIndices.ipDst];
 
-                    // Aplica o filtro de IP
-                    if (filterIp && srcIp !== filterIp && dstIp !== filterIp) {
-                        continue; // Pula o pacote se não corresponder ao filtro
-                    }
-
                     if (srcIp && dstIp) {
                         totalPackets++;
-
-                        // Calcula pacotes por segundo
-                        const time = parseFloat(data[colIndices.timeRelative]);
-                        const timeBucket = Math.floor(time);
-                        packetsPerSecond[timeBucket] = (packetsPerSecond[timeBucket] || 0) + 1;
-
-                        // Analisa problemas
+                        let isLoss = false;
                         let isProblem = false;
                         let reason = '';
-                        if (colIndices.retransmission !== -1 && data[colIndices.retransmission]) {
+                        
+                        if (data[colIndices.retransmission] || data[colIndices.fastRetransmission]) {
+                            isLoss = true;
                             isProblem = true;
-                            reason = 'Retransmissão TCP';
-                        } else if (colIndices.fastRetransmission !== -1 && data[colIndices.fastRetransmission]) {
+                            reason = 'Retransmissão';
+                            totalLostPackets++;
+                        } else if (data[colIndices.duplicateAck]) {
                             isProblem = true;
-                            reason = 'Retransmissão Rápida';
-                        } else if (colIndices.duplicateAck !== -1 && data[colIndices.duplicateAck]) {
-                            isProblem = true;
-                            reason = `ACK Duplicado`;
+                            reason = 'ACK Duplicado';
                         }
-
-                        if(isProblem) {
-                            if(reason.includes('Retransmissão')) { lostPackets++; }
+                        
+                        allPackets.push({
+                            frameNumber: data[colIndices.frameNumber],
+                            timeRelative: parseFloat(data[colIndices.timeRelative]),
+                            srcIp: srcIp,
+                            dstIp: dstIp,
+                            isLoss: isLoss
+                        });
+                        
+                        if (isProblem) {
                             problematicPackets.push({ frameNumber: data[colIndices.frameNumber], src: srcIp, dst: dstIp, reason });
                         }
                     }
                 }
-                return { totalPackets, lostPackets, problematicPackets, packetsPerSecond };
+                return { totalPackets, totalLostPackets, problematicPackets };
             }
 
-            function displayResults(stats, filterIp) {
-                const lossRate = stats.totalPackets > 0 ? (stats.lostPackets / stats.totalPackets * 100).toFixed(2) : 0;
-
+            // Função para exibir os resultados GLOBAIS
+            function displayGlobalResults(stats) {
+                const lossRate = stats.totalPackets > 0 ? (stats.totalLostPackets / stats.totalPackets * 100).toFixed(2) : 0;
                 document.getElementById('total-packets').textContent = stats.totalPackets;
-                document.getElementById('lost-packets').textContent = stats.lostPackets;
+                document.getElementById('lost-packets').textContent = stats.totalLostPackets;
                 document.getElementById('loss-rate').textContent = `${lossRate}%`;
-                
-                // ... (código de diagnóstico e cores dos cards) ...
+
+                // Código do diagnóstico
                 const diagnosisBox = document.getElementById('diagnosis-box');
                 const diagnosisTitle = document.getElementById('diagnosis-title');
                 const diagnosisText = document.getElementById('diagnosis-text');
                 diagnosisBox.style.border = '1px solid';
                 if (lossRate > 2) {
                     diagnosisBox.style.backgroundColor = '#450a0a'; diagnosisBox.style.borderColor = '#7f1d1d';
-                    diagnosisTitle.textContent = 'Conexão Muito Ruim';
-                    diagnosisText.textContent = 'Taxa de perda alta. Isso afetará negativamente a performance.';
+                    diagnosisTitle.textContent = 'Conexão Geral Muito Ruim';
+                    diagnosisText.textContent = 'A captura geral mostra uma alta taxa de perda de pacotes.';
                 } else if (lossRate > 0.5) {
                     diagnosisBox.style.backgroundColor = '#422006'; diagnosisBox.style.borderColor = '#713f12';
-                    diagnosisTitle.textContent = 'Conexão Instável';
-                    diagnosisText.textContent = 'Perda moderada de pacotes. Pode causar "lags".';
+                    diagnosisTitle.textContent = 'Conexão Geral Instável';
+                    diagnosisText.textContent = 'A captura mostra uma moderada perda de pacotes.';
                 } else {
                     diagnosisBox.style.backgroundColor = '#14532d'; diagnosisBox.style.borderColor = '#166534';
-                    diagnosisTitle.textContent = 'Conexão Saudável';
-                    diagnosisText.textContent = 'Taxa de retransmissão baixa. Conexão estável.';
+                    diagnosisTitle.textContent = 'Conexão Geral Saudável';
+                    diagnosisText.textContent = 'A captura geral aparenta ter uma conexão estável.';
                 }
                 
-                // ... (código da tabela de problemas) ...
+                // Código da tabela de problemas
                 const tableBody = document.getElementById('problems-table-body');
                 const noProblemsP = document.getElementById('no-problems-found');
                 tableBody.innerHTML = '';
@@ -366,46 +362,87 @@
                 } else {
                     noProblemsP.classList.remove('hidden');
                 }
+            }
 
-                // Desenha o gráfico de pacotes por segundo
-                if (packetTimeChart) {
-                    packetTimeChart.destroy(); // Destrói o gráfico anterior
+            // Função para analisar dados de um IP específico
+            function analyzeIpTraffic(filterIp) {
+                const packetsPerSecond = {};
+                const lossesPerSecond = {};
+
+                const filteredPackets = allPackets.filter(p => p.srcIp === filterIp || p.dstIp === filterIp);
+
+                if (filteredPackets.length === 0) {
+                    showError(`Nenhum pacote encontrado para o IP ${filterIp}. Verifique o IP ou o arquivo.`);
+                    return null;
                 }
-                
-                if (filterIp && Object.keys(stats.packetsPerSecond).length > 0) {
-                    timeChartContainer.classList.remove('hidden');
-                    const ctx = document.getElementById('packet-time-chart').getContext('2d');
-                    
-                    const labels = Object.keys(stats.packetsPerSecond).map(sec => `Seg. ${sec}`);
-                    const data = Object.values(stats.packetsPerSecond);
 
-                    packetTimeChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
+                for (const packet of filteredPackets) {
+                    const timeBucket = Math.floor(packet.timeRelative);
+                    packetsPerSecond[timeBucket] = (packetsPerSecond[timeBucket] || 0) + 1;
+                    if (packet.isLoss) {
+                        lossesPerSecond[timeBucket] = (lossesPerSecond[timeBucket] || 0) + 1;
+                    }
+                }
+                return { packetsPerSecond, lossesPerSecond };
+            }
+
+            // Função para exibir o gráfico do IP
+            function displayIpChart(stats) {
+                if (!stats) return; // Se não houver estatísticas, não faz nada
+                
+                if (ipTrafficChart) {
+                    ipTrafficChart.destroy();
+                }
+                timeChartContainer.classList.remove('hidden');
+                const ctx = document.getElementById('ip-traffic-chart').getContext('2d');
+                
+                const allSeconds = new Set([...Object.keys(stats.packetsPerSecond), ...Object.keys(stats.lossesPerSecond)]);
+                const sortedSeconds = Array.from(allSeconds).map(Number).sort((a, b) => a - b);
+                
+                const labels = sortedSeconds;
+                const ppsData = sortedSeconds.map(sec => stats.packetsPerSecond[sec] || 0);
+                const lpsData = sortedSeconds.map(sec => stats.lossesPerSecond[sec] || 0);
+
+                ipTrafficChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
                                 label: 'Pacotes por Segundo (PPS)',
-                                data: data,
+                                data: ppsData,
                                 borderColor: 'rgba(99, 102, 241, 1)',
                                 backgroundColor: 'rgba(99, 102, 241, 0.2)',
                                 fill: true,
                                 tension: 0.1,
-                                borderWidth: 2,
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: { beginAtZero: true, ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
-                                x: { ticks: { color: '#9ca3af' }, grid: { color: 'rgba(255, 255, 255, 0.05)' } }
+                                yAxisID: 'y'
                             },
-                            plugins: { legend: { display: false } }
+                            {
+                                label: 'Perdas por Segundo (LPS)',
+                                data: lpsData,
+                                borderColor: 'rgba(239, 68, 68, 1)',
+                                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                                fill: true,
+                                tension: 0.1,
+                                yAxisID: 'y'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: { legend: { labels: { color: '#d1d5db' } } },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { color: '#9ca3af', stepSize: 1 }, grid: { color: 'rgba(255, 255, 255, 0.1)' } },
+                            x: { 
+                                ticks: { color: '#9ca3af' }, 
+                                grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                                title: { display: true, text: 'Tempo (em segundos)', color: '#d1d5db' }
+                            }
                         }
-                    });
-                } else {
-                    timeChartContainer.classList.add('hidden');
-                }
+                    }
+                });
             }
         });
     </script>
